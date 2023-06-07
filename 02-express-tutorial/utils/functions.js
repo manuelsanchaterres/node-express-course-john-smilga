@@ -40,6 +40,7 @@ const readDirectoryServeContentFiles = async (routePath, readdir, readFile, path
                     readFile(filePath, 'utf8')
 
                     .then((data) => {
+                        
                     res.write(data);
                     res.end();
                     })
@@ -54,7 +55,6 @@ const readDirectoryServeContentFiles = async (routePath, readdir, readFile, path
             
             } else if (req.url === '/') {
 
-                console.log('home page');
                 res.writeHead(200, { 'content-type': `text/html` })
                 res.write(
                     

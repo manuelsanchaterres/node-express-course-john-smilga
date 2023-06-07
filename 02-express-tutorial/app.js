@@ -1,23 +1,88 @@
-const http = require('http');
-const  { readdir, readFile } = require ('node:fs/promises');
-const path = require('path');
+const express = require('express')
 
-const { readDirectoryServeContentFiles } = require('./utils/functions');
+const app = express()
+const {products} = require('./data')
 
-const server = http.createServer((req, res) => {
+app.get('/', (req,res) => {
 
-    let routePaths= ['./navbar-app'];
+  res.send('<h1>Home Page</h1><a href="/api/products">products</a>')
 
-    for ( let i = 0; i < routePaths.length; i++ ){
+})
 
-        readDirectoryServeContentFiles(routePaths[i], readdir, readFile, path, req, res)
+app.get('/api/products', (req,res) => {
 
-    }
+  let productsArray = []
+
+  const newProducts = products.map((product) => {
+
+    const {id, name, image} = product
+
+    return {id, name, image}
+
+  })
+
+  res.json(newProducts)
+  
+})
+
+app.get('/api/products/:productId', (req,res) => {
+
+  const newProduct = products.find((product) => product.id === parseInt(req.params.productId))
+  
+  if (newProduct) {
+
+    return res.json(newProduct)
+
+  }
+
+  return res.status(404).send(`product with id ${req.params.productId} was not found`)
+  
+})
 
 
-});
+app.get('/api/products/:productId/reviews/:reviewId', (req,res) => {
 
-const port = 3000;
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
-});
+  const {productId, reviewId} = req.params
+
+  console.log({productId, reviewId});
+
+  res.json({productId, reviewId})
+
+})
+
+app.get('/api/product-search/query', (req,res) => {
+
+  const {search, limit} = req.query
+  let sortedProducts = [...products]
+
+  if (search) {
+
+    sortedProducts = sortedProducts.filter((product) => {
+
+      return product.name.startsWith(search)
+
+    })
+  }
+
+  if (limit) {
+
+    sortedProducts = sortedProducts.slice(0, parseInt(limit))
+
+  }
+
+  if (sortedProducts.length < 1) {
+
+    // res.status(200).send('no product matched your search criteria')
+
+    return res.status(200).json({success: true, data: []})
+
+  }
+
+  return res.json(sortedProducts)
+
+})
+app.listen(5000, () => {
+
+  console.log('server is listening on port 5000....');
+
+})
