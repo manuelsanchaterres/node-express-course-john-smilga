@@ -12,5 +12,11 @@ const currentOS = {
   release: os.release(),
   totalMem: os.totalmem(),
   freeMem: os.freemem(),
+  cpuInfo: os.cpus().map((item) => item.times),
 }
-console.log(currentOS)
+console.log(JSON.stringify(os.EOL))
+// console.log(typeof(os.EOL))
+// console.log(os.EOL)
+
+
+
