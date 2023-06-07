@@ -1,88 +1,38 @@
 const express = require('express')
-
 const app = express()
-const {products} = require('./data')
+const {logger} = require('./middlewares/index')
 
-app.get('/', (req,res) => {
+app.use('/api',logger)
 
-  res.send('<h1>Home Page</h1><a href="/api/products">products</a>')
+app.get('/', (req, res) => {
+
+  res.send('home page')
 
 })
 
-app.get('/api/products', (req,res) => {
+app.get('/about', (req, res) => {
 
-  let productsArray = []
-
-  const newProducts = products.map((product) => {
-
-    const {id, name, image} = product
-
-    return {id, name, image}
-
-  })
-
-  res.json(newProducts)
+  res.end('about page')
   
 })
 
-app.get('/api/products/:productId', (req,res) => {
+app.get('/api/products', (req, res) => {
 
-  const newProduct = products.find((product) => product.id === parseInt(req.params.productId))
+  res.end('about page')
   
-  if (newProduct) {
+})
 
-    return res.json(newProduct)
+app.get('/api/items', (req, res) => {
 
-  }
-
-  return res.status(404).send(`product with id ${req.params.productId} was not found`)
+  res.end('about page')
   
 })
 
 
-app.get('/api/products/:productId/reviews/:reviewId', (req,res) => {
 
-  const {productId, reviewId} = req.params
-
-  console.log({productId, reviewId});
-
-  res.json({productId, reviewId})
-
-})
-
-app.get('/api/product-search/query', (req,res) => {
-
-  const {search, limit} = req.query
-  let sortedProducts = [...products]
-
-  if (search) {
-
-    sortedProducts = sortedProducts.filter((product) => {
-
-      return product.name.startsWith(search)
-
-    })
-  }
-
-  if (limit) {
-
-    sortedProducts = sortedProducts.slice(0, parseInt(limit))
-
-  }
-
-  if (sortedProducts.length < 1) {
-
-    // res.status(200).send('no product matched your search criteria')
-
-    return res.status(200).json({success: true, data: []})
-
-  }
-
-  return res.json(sortedProducts)
-
-})
 app.listen(5000, () => {
 
-  console.log('server is listening on port 5000....');
+  console.log('server is running on port 5000...');
 
 })
+
