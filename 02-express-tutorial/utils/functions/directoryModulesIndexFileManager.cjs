@@ -3,7 +3,7 @@ const path = require('path');
 const chokidar = require('chokidar');
 
 // Specify the directories where your modules are located
-const moduleDirectories = ['./middlewares', './routes'];
+const moduleDirectories = ['./middlewares', './routes', './controllers'];
 
 // Function to generate the index.js file
 const generateIndexFile = () => {

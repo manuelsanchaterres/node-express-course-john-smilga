@@ -1,38 +1,20 @@
 const express = require('express')
 const app = express()
-const {logger} = require('./middlewares/index')
 
-app.use('/api',logger)
+const {routes_people, routes_auth} = require('./routes/index')
 
-app.get('/', (req, res) => {
+// static assets
+app.use(express.static('./methods-public'))
+// parse form data
+app.use(express.urlencoded({ extended: false }))
+// parse json
+app.use(express.json())
 
-  res.send('home page')
+app.use('/api/people', routes_people)
 
-})
-
-app.get('/about', (req, res) => {
-
-  res.end('about page')
-  
-})
-
-app.get('/api/products', (req, res) => {
-
-  res.end('about page')
-  
-})
-
-app.get('/api/items', (req, res) => {
-
-  res.end('about page')
-  
-})
-
+app.use('/login', routes_auth)
 
 
 app.listen(5000, () => {
-
-  console.log('server is running on port 5000...');
-
+  console.log('Server is listening on port 5000....')
 })
-

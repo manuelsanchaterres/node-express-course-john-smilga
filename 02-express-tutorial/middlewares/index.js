@@ -1,4 +1,4 @@
+const authorize = require('./authorize');
 const logger = require('./logger');
-const prueba = require('./prueba');
 
-module.exports = {logger, prueba};
+module.exports = {authorize, logger};

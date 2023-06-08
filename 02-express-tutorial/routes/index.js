@@ -1,4 +1,4 @@
-const prueba = require('./prueba');
-const route = require('./route');
+const routes_auth = require('./routes_auth');
+const routes_people = require('./routes_people');
 
-module.exports = {prueba, route};
+module.exports = {routes_auth, routes_people};
