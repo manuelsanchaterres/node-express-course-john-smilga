@@ -9,11 +9,11 @@ const id = new URLSearchParams(params).get('id')
 let tempName
 
 const showTask = async () => {
+
   try {
-    const {
-      data: { task },
-    } = await axios.get(`/api/v1/tasks/${id}`)
-    const { _id: taskID, completed, name } = task
+    const {data} = await axios.get(`/api/v1/tasks/${id}`)
+
+   const {_id: taskID, name, completed} = data.data;
 
     taskIDDOM.textContent = taskID
     taskNameDOM.value = name
@@ -35,25 +35,28 @@ editFormDOM.addEventListener('submit', async (e) => {
     const taskName = taskNameDOM.value
     const taskCompleted = taskCompletedDOM.checked
 
-    const {
-      data: { task },
-    } = await axios.patch(`/api/v1/tasks/${id}`, {
+    const {data} = await axios.patch(`/api/v1/tasks/${id}`, 
+    
+    {
       name: taskName,
       completed: taskCompleted,
     })
 
-    const { _id: taskID, completed, name } = task
+    const editedTask = data.data
+    const { _id: taskID, completed, name } = editedTask
 
     taskIDDOM.textContent = taskID
     taskNameDOM.value = name
-    tempName = name
+    // tempName = name
     if (completed) {
       taskCompletedDOM.checked = true
     }
     formAlertDOM.style.display = 'block'
     formAlertDOM.textContent = `success, edited task`
     formAlertDOM.classList.add('text-success')
-  } catch (error) {
+  } 
+  
+  catch (error) {
     console.error(error)
     taskNameDOM.value = tempName
     formAlertDOM.style.display = 'block'
@@ -63,5 +66,9 @@ editFormDOM.addEventListener('submit', async (e) => {
   setTimeout(() => {
     formAlertDOM.style.display = 'none'
     formAlertDOM.classList.remove('text-success')
+    
+    // after 3 seconds user is redirected to app home page
+    window.location.href = '/'
   }, 3000)
+
 })
