@@ -1,6 +1,6 @@
 const CustomAPIError = require("../errors/custom_error")
 const jwt = require('jsonwebtoken')
-require('dotenv').config()
+require('express-async-errors')
 
 const login = async (req,res) => {
 
@@ -25,17 +25,20 @@ const dashboard = async (req,res, next) => {
 
     const authHeader = req.headers.authorization
 
-    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-
-    //     throw new CustomAPIError("Invalid or no token provided", 401)
-
-    // }
-
-    if (!authHeader || !authHeader.test(/^Bearer /)) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
 
         throw new CustomAPIError("Invalid or no token provided", 401)
 
     }
+
+    next()
+    // const regEx = /^Bearer /
+
+    // if (!authHeader || !(regEx.test(authHeader))) {
+
+    //     throw new CustomAPIError("Invalid or no token provided", 401)
+
+    // }
 
     
     const luckyNumber = Math.floor(Math.random()*100)
