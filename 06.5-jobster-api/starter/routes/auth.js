@@ -1,7 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const { register, login } = require('../controllers/auth')
-router.post('/register', register)
-router.post('/login', login)
-
+const { register, login, updateUser } = require('../controllers/auth')
+const auth = require('../middleware/authentication')
+const testuser = require('../middleware/testuser')
+const apiLimiter = require('../middleware/api-limiter')
+router.post('/register',apiLimiter, register)
+router.post('/login',apiLimiter, login)
+router.patch('/updateUser',auth, testuser, updateUser)
 module.exports = router
