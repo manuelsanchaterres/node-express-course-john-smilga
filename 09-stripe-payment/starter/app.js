@@ -9,11 +9,13 @@ const app = express();
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');
 const errorHandlerMiddleware = require('./middleware/error-handler');
+const stripeController = require('./controllers/stripeController');
 
 app.use(express.json());
 app.use(express.static('./public'));
 
 // stripe
+app.post('/stripe', stripeController)
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 

@@ -6,7 +6,7 @@ const total_amount = 10998;
 const shipping_fee = 1099;
 
 var stripe = Stripe(
-  'pk_test_51I87djFp5pnuKUXgBVIHiR36vVAWyfuyb7ckrhgyDNA1kM0GWHas9ZGUAgwJSFNUxrbyE6NwlMNmls1iGSfzHDdE00DQB3y6AH'
+  'pk_test_51N693QID0AuHloN1cHyQiZQEtJmjBYcYYU2YZtkIoMY7Rh4vBXqOlTN93HzfJusfwKcszGxNJc30JguITwVwAqnY001iBZ2hhm'
 );
 
 // The items the customer wants to buy
@@ -21,9 +21,11 @@ fetch('/stripe', {
   body: JSON.stringify({ purchase, total_amount, shipping_fee }),
 })
   .then(function (result) {
+
     return result.json();
   })
   .then(function (data) {
+
     var elements = stripe.elements();
 
     var style = {
