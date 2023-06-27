@@ -10,10 +10,12 @@ const notFound = require('./middleware/not-found')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 const port = process.env.LOCAL_SERVER_HTTP_PORT || 5000
 const authRouter = require('./routes/authRoutes')
-
+const cors = require('cors')
 
 // request body format express middleware
 app.use(morgan('dev'))
+app.use(express.static('./public'))
+app.use(cors())
 app.use(express.json())
 app.use(cookieParser(process.env.JWT_SECRET))
 

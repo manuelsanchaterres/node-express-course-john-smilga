@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 const sgMail = require('@sendgrid/mail');
 
 const sendEmailEthereal = async (req, res) => {
+  
   let testAccount = await nodemailer.createTestAccount();
 
   const transporter = nodemailer.createTransport({
@@ -11,6 +12,7 @@ const sendEmailEthereal = async (req, res) => {
       user: 'marlene.legros@ethereal.email',
       pass: 'va4q5BKKtry7aq58Gv',
     },
+
   });
 
   let info = await transporter.sendMail({
