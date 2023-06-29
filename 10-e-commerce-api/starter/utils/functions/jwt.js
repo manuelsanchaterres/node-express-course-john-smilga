@@ -20,6 +20,7 @@ const attachCookiesToResponse = ({res,user}) => {
     const token = createJwt({payload: user})
 
     const oneDay = 1000*60*60*24
+    
     res.cookie('token', token, {
         httpOnly: true,
         expires: new Date(Date.now() + oneDay),
@@ -33,13 +34,13 @@ const attachCookiesToResponse = ({res,user}) => {
 
 const removeCookiesFromResponse = ({res}) => {
 
-    res.clearCookie('token')
+    // res.clearCookie('token')
 
-    // res.cookie('token', 'logout', {
+    res.cookie('token', 'logout', {
 
-    //     httpOnly: true,
-    //     expires: new Date(Date.now())
-    // })
+        httpOnly: true,
+        expires: new Date(Date.now())
+    })
 
     res.status(200).json({msg: 'user logged out'})
 

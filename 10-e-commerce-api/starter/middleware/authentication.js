@@ -1,30 +1,27 @@
-const CustomAPIError = require('../errors/')
+const CustomError = require('../errors/')
 const { isTokenValid } = require('../utils/functions');
 
-const authentication = async (req,res,next) => {
+const authenticateUser = async (req,res,next) => {
 
-    const authHeader = req.headers.authorization;
+    const token = req.signedCookies.token
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!token) {
 
-        throw new CustomAPIError.BadRequestError('Authorization header format not valid')
-
+        throw new CustomError.UnauthenticatedError('Authentication invalid')
     }
-
-    const token = authHeader.split(' ')[1]
 
     try {
         
-        const payload = isTokenValid(token)
-
-        req.user = {userId: payload.userId}
+        const payload = isTokenValid({token})
+        req.user = {name: payload.name, userId: payload.userId, role: payload.role}
 
         next()
+    
     } catch (error) {
-        
-        throw new CustomAPIError.UnauthenticatedError('Authentication failed')
+
+        throw new CustomError.UnauthenticatedError('Authentication invalid')
     }
 
 }
 
-module.exports = authentication
+module.exports = authenticateUser
