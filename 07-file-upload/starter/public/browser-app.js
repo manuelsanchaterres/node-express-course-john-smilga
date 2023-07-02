@@ -13,12 +13,6 @@ let imageValue;
 //  console.log(file);
 // })
 
-
-
-
-
-
-
 imageInputDOM.addEventListener('change',async (e)=>{
  const imageFile = e.target.files[0];
  const formData = new FormData();
@@ -39,14 +33,19 @@ imageInputDOM.addEventListener('change',async (e)=>{
 
 fileFormDOM.addEventListener('submit',async (e)=>{
 e.preventDefault()
-const nameValue = nameInputDOM.value;
-const priceValue = priceInputDOM.value;
+let nameValue = nameInputDOM.value;
+let priceValue = priceInputDOM.value;
 try {
  
  const product = {name:nameValue,price:priceValue,image:imageValue}
  
   await axios.post(url,product);
   fetchProducts()
+
+  nameInputDOM.value = 'computer'
+  priceInputDOM.value = 150.99,
+  imageInputDOM.value = ""
+  
 } catch (error) {
  console.log(error);
 }
