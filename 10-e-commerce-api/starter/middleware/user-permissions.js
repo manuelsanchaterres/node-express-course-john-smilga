@@ -9,10 +9,17 @@ const checkPermissions = (...roles) => {
             throw new CustomError.ForbidenAccessError('Unauthorized to access this route')
         }
 
-        if (req.user.role === 'user' && (req.user.userId !== req.params.id)) {
+        // check if the user requesting to get single user if the one who created it or admin
 
-            throw new CustomError.ForbidenAccessError('Unauthorized to access this user')
+        if (req.user.role && req.params.id) {
 
+            if (req.user.role === 'user' && (req.user.userId !== req.params.id)) {
+
+
+                throw new CustomError.ForbidenAccessError('Not owner of the modified resource')
+    
+            }
+    
         }
 
         next();

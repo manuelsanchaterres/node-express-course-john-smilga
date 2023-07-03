@@ -5,7 +5,12 @@ const {createReview, getAllReviews, getSingleReview, updateReview, deleteReview}
 const authenticateUser = require('../middleware/authentication')
 const { checkPermissions } = require('../middleware/user-permissions')
 
-router.route('/').post(authenticateUser, checkPermissions('user'), createReview).get(getAllReviews)
-router.route('/:id').get(getSingleReview).patch(authenticateUser, checkPermissions('user'), updateReview).delete(authenticateUser, checkPermissions('user'), deleteReview)
+// router.route('/:productId').post(authenticateUser, checkPermissions('user'), createReview).get(getAllReviews)
+// router.route('/:productId/:reviewId').get(getSingleReview).patch(authenticateUser, checkPermissions('user'), updateReview).delete(authenticateUser, checkPermissions('user'), deleteReview)
+router.route('/product/:productId').post(authenticateUser, checkPermissions('user'), createReview).get(getAllReviews)
+router.route('/product/:productId/review/:reviewId')
+.get(getSingleReview)
+.patch(authenticateUser, checkPermissions('user'), updateReview)
+.delete(authenticateUser, checkPermissions('user'), deleteReview)
 
 module.exports = router

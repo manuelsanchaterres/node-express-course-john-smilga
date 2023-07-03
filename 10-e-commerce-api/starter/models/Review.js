@@ -47,16 +47,16 @@ const ReviewSchema = new mongoose.Schema({
 
 ReviewSchema.index({product: 1, user: 1}, {unique: true})
 
-ReviewSchema.pre('save', async function () {
+// ReviewSchema.pre('save', async function () {
 
-    const noUniqueReview = await this.schema.countDocuments({user: this.user, product: this.product}) > 1
+//     const noUniqueReview = await this.schema.countDocuments({user: this.user, product: this.product}) > 1
 
-    if (noUniqueReview) {
+//     if (noUniqueReview) {
 
-        throw new CustomError.BadRequestError('Only one comment per user and product permitted')
-    }
+//         throw new CustomError.BadRequestError('Only one comment per user and product permitted')
+//     }
 
-});
+// });
 
 
 module.exports = mongoose.model('Review', ReviewSchema)
