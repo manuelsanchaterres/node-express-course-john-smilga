@@ -7,9 +7,19 @@ const app = express();
 // database
 const connectDB = require('./db/connect');
 
+
 // file uploading
 
 const expressFileUpload = require('express-fileupload')
+
+// USE V2
+// const cloudinary = require('cloudinary').v2
+// cloudinary.config({
+
+//   cloud_name: process.env.CLOUDINARY_ENVIRONMENT_NAME,
+//   api_key: process.env.CLOUDINARY_ENVIRONMENT_API_KEY,
+//   api_secret: process.env.CLOUDINARY_ENVIRONMENT_API_SECRET,
+// })
 
 // app routers
 
@@ -18,7 +28,10 @@ const productRouter = require('./routes/productRoutes')
 // express middlewares
 app.use(express.static('./public'))
 app.use(express.json())
-app.use(expressFileUpload())
+app.use(expressFileUpload({
+  // useTempFiles: true,
+  // safeFileNames: true
+}))
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');

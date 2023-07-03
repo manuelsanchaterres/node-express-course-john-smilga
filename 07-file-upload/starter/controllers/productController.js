@@ -3,6 +3,7 @@ const {NotFoundError} = require("../errors");
 const Product = require("../models/Product");
 const eventEmitter = require('../events/eventEmitter');
 
+
 const getAllProducts = async (req,res) => {
 
     const products = await Product.find({})
@@ -39,13 +40,14 @@ const createProduct = async (req,res) => {
 
         throw new NotFoundError('product was not created')
 
-    }
-
-    eventEmitter.emit('productCreated')
+    } 
     
+    eventEmitter.emit('ProductCreated', true)
+
     res.status(StatusCodes.CREATED).json({product})
 
 }
+
 
 const updateProduct = async (req,res) => {
 

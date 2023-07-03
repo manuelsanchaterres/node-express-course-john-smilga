@@ -14,7 +14,8 @@ let imageValue;
 // })
 
 imageInputDOM.addEventListener('change',async (e)=>{
- const imageFile = e.target.files[0];
+ let imageFile = e.target.files[0];
+ 
  const formData = new FormData();
  formData.append('image',imageFile)
  try {
@@ -40,11 +41,12 @@ try {
  const product = {name:nameValue,price:priceValue,image:imageValue}
  
   await axios.post(url,product);
+
   fetchProducts()
 
   nameInputDOM.value = 'computer'
   priceInputDOM.value = 150.99,
-  imageInputDOM.value = ""
+  imageInputDOM.value = null
   
 } catch (error) {
  console.log(error);

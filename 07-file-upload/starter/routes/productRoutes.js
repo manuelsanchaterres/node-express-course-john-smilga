@@ -9,10 +9,10 @@ const{
     deleteProduct} 
     = require('../controllers/productController')
 
-const {uploadProductImage} = require('../controllers/uploadsController')
+const {uploadProductImageLocal, uploadProductImage} = require('../controllers/uploadsController')
 
 router.route('/').get(getAllProducts).post(createProduct)
-router.route('/uploads').post(uploadProductImage)
+router.route('/uploads').post(uploadProductImageLocal)
 
 router.route('/:id').get(getSingleProduct).patch(updateProduct).delete(deleteProduct)
 
