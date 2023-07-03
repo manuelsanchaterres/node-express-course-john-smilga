@@ -14,7 +14,7 @@ const { uploadImageLocal, uploadImageCloudinary } = require('../controllers/uplo
 router
 .route('/')
 .get(getAllProducts)
-.post(authenticateUser,checkPermissions('admin'),createProduct)
+.post(authenticateUser,checkPermissions('admin'), createProduct)
 
 router
 .route('/uploadImage')

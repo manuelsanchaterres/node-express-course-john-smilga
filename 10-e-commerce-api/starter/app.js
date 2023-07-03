@@ -16,7 +16,7 @@ const authRouter = require('./routes/authRoutes')
 const userRouter = require('./routes/userRoutes')
 const authenticateUser = require('./middleware/authentication');
 const productRouter = require('./routes/productRoutes')
-
+const reviewRouter = require('./routes/reviewRoutes')
 
 // file uploading
 
@@ -39,6 +39,7 @@ app.use(express.json())
 app.use(cookieParser(process.env.JWT_SECRET))
 
 // Basic Routes and Middleware
+
 app.use(cors())
 app.use(express.static('./public'));
 app.use(expressFileUpload({
@@ -60,6 +61,7 @@ app.get('/api/v1', (req,res) => {
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/users',authenticateUser, userRouter)
 app.use('/api/v1/products', productRouter)
+app.use('/api/v1/reviews', reviewRouter)
 
 // not found and errorhandler middlewares
 
