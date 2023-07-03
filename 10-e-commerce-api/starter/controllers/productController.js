@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/Product");
 const { BadRequestError, NotFoundError} = require("../errors");
 const { checkOwnership } = require("../utils/functions/checkOwnership");
+const eventEmitter = require('../events/eventEmitter');
 
 const createProduct = async (req,res) => {
 
@@ -13,6 +14,8 @@ const createProduct = async (req,res) => {
 
         throw new BadRequestError('Product not created')
     }
+
+    eventEmitter.emit('ProductCreated', true)
 
     res.status(StatusCodes.CREATED).json({product})
 
@@ -80,14 +83,6 @@ const deleteProduct = async (req,res) => {
 
 }
 
-const uploadImage = async (req,res) => {
-
-    let product = await Product.findById(req.params.id)
-
-    checkOwnership({productUser: product.user, userId: req.user.userId} )
-
-    res.send('uploadImage')
-}
 
 module.exports = {
     createProduct, 
@@ -95,5 +90,4 @@ module.exports = {
     getSingleProduct,
     updateProduct,
     deleteProduct,
-    uploadImage
 }

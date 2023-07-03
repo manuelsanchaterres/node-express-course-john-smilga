@@ -4,13 +4,12 @@ const {
     getSingleProduct,
     updateProduct,
     deleteProduct,
-    uploadImage
 } = require('../controllers/productController')
-
 const express = require('express')
 const router = express.Router()
 const authenticateUser = require('../middleware/authentication')
 const { checkPermissions } = require('../middleware/user-permissions')
+const { uploadImageLocal, uploadImageCloudinary } = require('../controllers/uploadImagesController')
 
 router
 .route('/')
@@ -19,7 +18,7 @@ router
 
 router
 .route('/uploadImage')
-.post(authenticateUser,checkPermissions('admin'),uploadImage)
+.post(authenticateUser,checkPermissions('admin'),uploadImageCloudinary)
 
 router
 .route('/:id')
