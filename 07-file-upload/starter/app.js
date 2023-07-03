@@ -13,13 +13,13 @@ const connectDB = require('./db/connect');
 const expressFileUpload = require('express-fileupload')
 
 // USE V2
-// const cloudinary = require('cloudinary').v2
-// cloudinary.config({
+const cloudinary = require('cloudinary').v2
+cloudinary.config({
 
-//   cloud_name: process.env.CLOUDINARY_ENVIRONMENT_NAME,
-//   api_key: process.env.CLOUDINARY_ENVIRONMENT_API_KEY,
-//   api_secret: process.env.CLOUDINARY_ENVIRONMENT_API_SECRET,
-// })
+  cloud_name: process.env.CLOUDINARY_ENVIRONMENT_NAME,
+  api_key: process.env.CLOUDINARY_ENVIRONMENT_API_KEY,
+  api_secret: process.env.CLOUDINARY_ENVIRONMENT_API_SECRET,
+})
 
 // app routers
 
@@ -29,8 +29,8 @@ const productRouter = require('./routes/productRoutes')
 app.use(express.static('./public'))
 app.use(express.json())
 app.use(expressFileUpload({
-  // useTempFiles: true,
-  // safeFileNames: true
+  useTempFiles: true,
+  safeFileNames: true
 }))
 
 // error handler

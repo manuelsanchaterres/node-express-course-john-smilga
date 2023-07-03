@@ -12,7 +12,7 @@ const{
 const {uploadProductImageLocal, uploadProductImage} = require('../controllers/uploadsController')
 
 router.route('/').get(getAllProducts).post(createProduct)
-router.route('/uploads').post(uploadProductImageLocal)
+router.route('/uploads').post(uploadProductImage)
 
 router.route('/:id').get(getSingleProduct).patch(updateProduct).delete(deleteProduct)
 
