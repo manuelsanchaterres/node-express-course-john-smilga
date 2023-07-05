@@ -1,7 +1,8 @@
 const Review = require("../models/Review");
 const CustomError = require('../errors');
 const { StatusCodes } = require("http-status-codes");
-
+const Product = require("../models/Product");
+const { checkOwnership } = require("../utils/functions/checkOwnership");
 
 const createReview = async(req,res) => {
 
@@ -11,6 +12,14 @@ const createReview = async(req,res) => {
     if (!req.params.productId) {
 
         throw new CustomError.NotFoundError('Product Id Not Provided')
+    }
+
+    const isReviewSent = await Review.findOne({product:req.params.productId, user: req.user.userId})
+
+    if (isReviewSent) {
+
+        throw new CustomError.BadRequestError(`Previous Review for product ${req.params.productId} already sent`)
+
     }
 
     const review = await Review.create(req.body)
@@ -27,12 +36,10 @@ const createReview = async(req,res) => {
 
 const getAllReviews = async(req,res) => {
 
-    if (!req.params.productId) {
-
-        throw new CustomError.NotFoundError('Product Id Not Provided')
-    }
-
-    const reviews = await Review.find({product: req.params.productId})
+    const reviews = await Review
+    .find({})
+    .populate({path: 'product', select: 'name company price'})
+    .populate({path: 'user', select: 'name'})
 
     if (!reviews) {
 
@@ -40,7 +47,7 @@ const getAllReviews = async(req,res) => {
 
     }
 
-    res.status(StatusCodes.OK).json({reviews})
+    res.status(StatusCodes.OK).json({reviews, count: reviews.length})
     
 }
 
@@ -54,7 +61,11 @@ const getSingleReview = async(req,res) => {
 
    }
     
-    const review = await Review.findOne({product: productId, _id:reviewId})
+    const review = await Review
+    .findOne({product: productId, _id:reviewId})
+    .populate({path: 'product', select: 'name company price -_id'})
+    .populate({path: 'user', select: 'name -_id'})
+
 
     if (!review) {
 
@@ -76,12 +87,21 @@ const updateReview = async(req,res) => {
  
     }
      
-    const review = await Review.findOneAndUpdate({product: productId, _id:reviewId, user: req.user.userId}, req.body, {new: true, runValidators: true})
+    const review = await Review.findOne({product: productId, _id:reviewId})
 
     if (!review) {
 
-        throw new CustomError.NotFoundError(`Review with id ${reviewId} was not updated`)
+        throw new CustomError.NotFoundError(`Review with id ${reviewId} was not deleted`)
     }
+
+    checkOwnership(req.user, review.user)
+
+    review.rating = req.body.rating
+    review.title = req.body.title
+    review.comment = req.body.comment
+    console.log(review);
+
+    review.save()
 
     res.status(StatusCodes.OK).json({review})
      
@@ -97,15 +117,29 @@ const deleteReview = async(req,res) => {
     
     }
         
-    const review = await Review.findOneAndDelete({product: productId, _id:reviewId, user: req.user.userId}, req.body, {new: true, runValidators: true})
+    const review = await Review.findOne({product: productId, _id:reviewId})
 
     if (!review) {
 
         throw new CustomError.NotFoundError(`Review with id ${reviewId} was not deleted`)
     }
 
-    res.status(StatusCodes.OK).json({review})
+    checkOwnership(req.user, review.user)
+
+    await review.deleteOne()
+    await Review.calculateAverageRating(review.product)
+
+    res.status(StatusCodes.OK).json({msg: 'Success!: Review removed'})
     
 }
 
-module.exports = {createReview, getAllReviews, getSingleReview, updateReview, deleteReview}
+const getSingleProductReviews = async(req,res) => {
+
+    const {id: productId} = req.params
+
+    const reviews = await Review.find({product: productId})
+    res.status(StatusCodes.OK).json({reviews, count: reviews.length})
+}
+
+
+module.exports = {createReview, getAllReviews, getSingleReview, updateReview, deleteReview, getSingleProductReviews}
