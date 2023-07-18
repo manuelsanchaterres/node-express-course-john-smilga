@@ -15,15 +15,15 @@ const AppProvider = ({ children }) => {
     setUser(null);
   };
 
-  // const fetchUser = async () => {
-  //   try {
-  //     const { data } = await axios.get(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/users/showMe`);
-  //     saveUser(data.user);
-  //   } catch (error) {
-  //     removeUser();
-  //   }
-  //   setIsLoading(false);
-  // };
+  const fetchUser = async () => {
+    try {
+      const { data } = await axios.get(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/users/showMe`);
+      saveUser(data.user);
+    } catch (error) {
+      removeUser();
+    }
+    setIsLoading(false);
+  };
 
   const logoutUser = async () => {
 

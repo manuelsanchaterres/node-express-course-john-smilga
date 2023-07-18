@@ -1,19 +1,27 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import main from '../assets/main.svg';
 import { useGlobalContext } from '../context';
 function Dashboard() {
-  const { user } = useGlobalContext();
-  const { name, userId, role } = user;
+  const { user: user } = useGlobalContext();
+  const navigate = useNavigate()
+  // const { name, userId, role } = user;
+
+  if (!user) {
+
+    return navigate('/')
+    
+  }
+
   return (
     <>
       <Wrapper className='page'>
-        <h2>Hello there, {name}</h2>
+        <h2>Hello there, {user?.name}</h2>
         <p>
-          Your ID : <span>{userId}</span>
+          Your ID : <span>{user?.userId}</span>
         </p>
         <p>
-          Your Role : <span>{role}</span>
+          Your Role : <span>{user?.role}</span>
         </p>
       </Wrapper>
     </>
