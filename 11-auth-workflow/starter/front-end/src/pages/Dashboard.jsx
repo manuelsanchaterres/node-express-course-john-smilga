@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import main from '../assets/main.svg';
-import { Redirect } from 'react-router-dom';
 import { useGlobalContext } from '../context';
 function Dashboard() {
   const { user } = useGlobalContext();
@@ -9,7 +8,7 @@ function Dashboard() {
   return (
     <>
       <Wrapper className='page'>
-        <h2>Hello there, {user.name}</h2>
+        <h2>Hello there, {name}</h2>
         <p>
           Your ID : <span>{userId}</span>
         </p>

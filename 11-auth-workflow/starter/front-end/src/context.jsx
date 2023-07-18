@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useContext, useState, useEffect } from 'react';
 import url from './utils/url';
+import { setCookies } from './utils/functions/setCookies';
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
   const saveUser = (user) => {
     setUser(user);
@@ -14,28 +15,30 @@ const AppProvider = ({ children }) => {
     setUser(null);
   };
 
-  const fetchUser = async () => {
-    try {
-      const { data } = await axios.get(`/api/v1/users/showMe`);
-      saveUser(data.user);
-    } catch (error) {
-      removeUser();
-    }
-    setIsLoading(false);
-  };
+  // const fetchUser = async () => {
+  //   try {
+  //     const { data } = await axios.get(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/users/showMe`);
+  //     saveUser(data.user);
+  //   } catch (error) {
+  //     removeUser();
+  //   }
+  //   setIsLoading(false);
+  // };
 
   const logoutUser = async () => {
+
     try {
-      await axios.delete('/api/v1/auth/logout');
+
+      await axios.delete(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/auth/logout`, setCookies());
       removeUser();
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   fetchUser();
+  // }, []);
 
   return (
     <AppContext.Provider

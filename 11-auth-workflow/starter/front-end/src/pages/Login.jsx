@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Link, useHistory, Redirect } from 'react-router-dom';
+import { Link, useNavigate, redirect } from 'react-router-dom';
 import FormRow from '../components/FormRow';
 import { useGlobalContext } from '../context';
 import useLocalState from '../utils/localState';
 
 import axios from 'axios';
+import { setCookies } from '../utils/functions/setCookies';
 
 function Login() {
   const { saveUser } = useGlobalContext();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     email: '',
     password: '',
@@ -26,7 +27,7 @@ function Login() {
     const { email, password } = values;
     const loginUser = { email, password };
     try {
-      const { data } = await axios.post(`/api/v1/auth/login`, loginUser);
+      const { data } = await axios.post(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/auth/login`, loginUser, setCookies());
       setValues({ name: '', email: '', password: '' });
       showAlert({
         text: `Welcome, ${data.user.name}. Redirecting to dashboard...`,
@@ -34,8 +35,9 @@ function Login() {
       });
       setLoading(false);
       saveUser(data.user);
-      history.push('/dashboard');
+      navigate('/dashboard');
     } catch (error) {
+      console.log(error.response.data.msg);
       showAlert({ text: error.response.data.msg });
       setLoading(false);
     }

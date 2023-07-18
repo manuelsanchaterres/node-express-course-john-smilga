@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useHistory, Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import FormRow from '../components/FormRow';
@@ -10,8 +10,10 @@ function useQuery() {
 }
 
 const ResetPasswordForm = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [password, setPassword] = useState('');
+  const [confirmPassword, setconfirmPassword] = useState('');
+
   const { alert, showAlert, loading, setLoading, success, setSuccess } =
     useLocalState();
 
@@ -20,16 +22,27 @@ const ResetPasswordForm = () => {
   const handleChange = async (e) => {
     setPassword(e.target.value);
   };
+  const handleChangeConfirmPassword = async (e) => {
+    setconfirmPassword(e.target.value);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    if (!password) {
+    if (!password || !confirmPassword) {
       showAlert({ text: 'please enter password' });
       setLoading(false);
       return;
     }
+
+    if (password !== confirmPassword) {
+      showAlert({ text: 'password and confirm password must be the same' });
+      setLoading(false);
+      return;
+    }
+
     try {
-      const { data } = await axios.post('/api/v1/auth/reset-password', {
+      const { data } = await axios.post(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/auth/reset-password`, {
         password,
         token: query.get('token'),
         email: query.get('email'),
@@ -41,7 +54,7 @@ const ResetPasswordForm = () => {
         type: 'success',
       });
       setTimeout(() => {
-        history.push('/login');
+        navigate('/login');
       }, 3000);
     } catch (error) {
       showAlert({ text: error.response.data.msg });
@@ -66,6 +79,13 @@ const ResetPasswordForm = () => {
             value={password}
             handleChange={handleChange}
           />
+          <FormRow
+            type='password'
+            name='confirm password'
+            value={confirmPassword}
+            handleChange={handleChangeConfirmPassword}
+          />
+
           {/* end of single form row */}
           <button type='submit' className='btn btn-block' disabled={loading}>
             {loading ? 'Please Wait...' : 'New Password'}

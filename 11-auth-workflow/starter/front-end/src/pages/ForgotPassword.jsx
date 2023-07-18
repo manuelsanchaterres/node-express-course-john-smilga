@@ -33,7 +33,7 @@ const ForgotPassword = () => {
       return;
     }
     try {
-      const { data } = await axios.post('/api/v1/auth/forgot-password', {
+      const { data } = await axios.post(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/auth/forgot-password`, {
         email,
       });
       showAlert({ text: data.msg, type: 'success' });

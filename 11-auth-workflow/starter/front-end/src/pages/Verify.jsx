@@ -15,13 +15,14 @@ const VerifyPage = () => {
 
   const verifyToken = async () => {
     setLoading(true);
+
     try {
-      const { data } = await axios.post('/api/v1/auth/verify-email', {
+      const { data } = await axios.post(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/auth/verify-email`, {
         verificationToken: query.get('token'),
         email: query.get('email'),
       });
     } catch (error) {
-      // console.log(error.response);
+      console.log(error.response);
       setError(true);
     }
     setLoading(false);
