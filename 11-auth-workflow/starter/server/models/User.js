@@ -28,7 +28,32 @@ const UserSchema = new mongoose.Schema({
     enum: ['admin', 'user'],
     default: 'user',
   },
-});
+  verificationToken: {
+    type: String
+  },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  verified: {
+    type: Date
+  },
+
+  passwordToken: {
+
+    type: String
+
+  },
+
+  passwordTokenExpirationDate: {
+
+    type: Date
+    
+  }
+
+
+
+},{timestamps: true});
 
 UserSchema.pre('save', async function () {
   // console.log(this.modifiedPaths());
