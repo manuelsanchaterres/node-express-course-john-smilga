@@ -7,22 +7,31 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
+  const [userLoggedOut, setUserLoggedOut] = useState(true);
+
   const saveUser = (user) => {
     setUser(user);
   };
 
   const removeUser = () => {
     setUser(null);
+
   };
 
   const fetchUser = async () => {
-    try {
-      const { data } = await axios.get(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/users/showMe`);
-      saveUser(data.user);
-    } catch (error) {
-      removeUser();
+
+    if (!userLoggedOut) {
+
+      try {
+        const { data } = await axios.get(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/users/showMe`);
+        saveUser(data.user);
+      } catch (error) {
+        removeUser();
+      }
+      setIsLoading(false);
+  
     }
-    setIsLoading(false);
+
   };
 
   const logoutUser = async () => {
@@ -34,11 +43,12 @@ const AppProvider = ({ children }) => {
     } catch (error) {
       console.log(error);
     }
+
   };
 
-  // useEffect(() => {
-  //   fetchUser();
-  // }, []);
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <AppContext.Provider
@@ -46,6 +56,7 @@ const AppProvider = ({ children }) => {
         isLoading,
         saveUser,
         user,
+        setUserLoggedOut,
         logoutUser,
       }}
     >

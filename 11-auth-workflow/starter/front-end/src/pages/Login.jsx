@@ -9,7 +9,7 @@ import axios from 'axios';
 import { setCookies } from '../utils/functions/setCookies';
 
 function Login() {
-  const { saveUser } = useGlobalContext();
+  const { saveUser, setUserLoggedOut } = useGlobalContext();
   const navigate = useNavigate();
   const [values, setValues] = useState({
     email: '',
@@ -28,6 +28,7 @@ function Login() {
     const loginUser = { email, password };
     try {
       const { data } = await axios.post(`${import.meta.env.VITE_LOCAL_SERVER_HTTP_ROOT_ENDPOINT}/api/v1/auth/login`, loginUser, setCookies());
+      setUserLoggedOut(false)
       setValues({ name: '', email: '', password: '' });
       showAlert({
         text: `Welcome, ${data.user.name}. Redirecting to dashboard...`,

@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import main from '../assets/main.svg';
 import { useGlobalContext } from '../context';
 function Dashboard() {
-  const { user: user } = useGlobalContext();
+  const { user: user, setUserLoggedOut } = useGlobalContext();
   const navigate = useNavigate()
   // const { name, userId, role } = user;
 
   if (!user) {
 
+    setUserLoggedOut(true)
+    
     return navigate('/')
     
   }
